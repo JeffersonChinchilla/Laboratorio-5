@@ -1,0 +1,60 @@
+import processing.serial.*;
+Serial puerto;
+int[] estadoLed = {0, 0, 0};
+boolean[] botonPresionado = {false, false, false};
+void setup() {
+  size(400, 400);
+  puerto = new Serial(this, Serial.list()[0], 9600);
+}
+void draw() {
+  background(255);
+  if (estadoLed[0] == 1) {
+    fill(#B3F0EB);
+  } else {
+    fill(225, 0, 0);
+  }
+  ellipse(width/4, height/2, 50, 50);
+  if (estadoLed[1] == 1) {
+    fill(#B3F0EB);
+  } else {
+    fill(13, 252, 30);
+  }
+  ellipse(width/2, height/2, 50, 50);
+  if (estadoLed[2] == 1) {
+    fill(#B3F0EB);
+  } else {
+    fill(252, 252, 252);
+  }
+  ellipse(3*width/4, height/2, 50, 50);
+}
+void mousePressed() {
+  if (dist(mouseX, mouseY, width/4, height/2) < 25) {
+    estadoLed[0] = 1;
+    botonPresionado[0] = true;
+    puerto.write('1');
+  } else if (dist(mouseX, mouseY, width/2, height/2) < 25) {
+    estadoLed[1] = 1;
+    botonPresionado[1] = true;
+    puerto.write('2');
+  } else if (dist(mouseX, mouseY, 3*width/4, height/2) < 25) {
+    estadoLed[2] = 1;
+    botonPresionado[2] = true;
+    puerto.write('3');
+  }
+}
+
+void mouseReleased() {
+  if (botonPresionado[0]) {
+    estadoLed[0] = 0;
+    botonPresionado[0] = false;
+    puerto.write('0');
+  } else if (botonPresionado[1]) {
+    estadoLed[1] = 0;
+    botonPresionado[1] = false;
+    puerto.write('0');
+  } else if (botonPresionado[2]) {
+    estadoLed[2] = 0;
+    botonPresionado[2] = false;
+    puerto.write('0');
+  }
+}
